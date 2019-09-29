@@ -1,0 +1,5 @@
+{
+  "blogposts": [
+    { "id": 1, "title": "Test", "content": "this is just a test :)" }
+  ]
+}
