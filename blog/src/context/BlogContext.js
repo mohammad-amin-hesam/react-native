@@ -1,5 +1,6 @@
 import createDataContext from "./createDataContext";
 import jsonServer from "../api/jsonServer";
+import axios from "axios";
 
 const blogReducer = (state, action) => {
   switch (action.type) {
@@ -29,14 +30,21 @@ const blogReducer = (state, action) => {
   }
 };
 
-const getBlogPosts = dispatch => async () => {
-  try {
-    const res = await jsonServer.get("blogposts");
-    dispatch({ type: "get_blogposts", payload: res.data });
-    console.log(res);
-  } catch (err) {
-    console.log(err);
-  }
+const getBlogPosts = dispatch => () => {
+  axios
+    .get("http://192.168.1.12:3000/blogposts")
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => console.log(err));
+  // jsonServer
+  //   .get("blogposts")
+  //   .then(res => {
+  //     dispatch({ type: "get_blogposts", payload: res.data });
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
 };
 
 const addBlogPost = dispatch => (title, content, callBack) => {
