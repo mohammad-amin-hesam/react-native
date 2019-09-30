@@ -1,6 +1,5 @@
 import createDataContext from "./createDataContext";
 import jsonServer from "../api/jsonServer";
-import axios from "axios";
 
 const blogReducer = (state, action) => {
   switch (action.type) {
@@ -31,12 +30,15 @@ const blogReducer = (state, action) => {
 };
 
 const getBlogPosts = dispatch => () => {
-  axios
-    .get("http://192.168.1.12:3000/blogposts")
-    .then(res => {
-      console.log(res);
+  jsonServer
+    .post("login", {
+      mobile: "guest",
+      password: "1",
+      code: "+98"
     })
-    .catch(err => console.log(err));
+    .then(res => {
+      console.log(res.data.token);
+    });
   // jsonServer
   //   .get("blogposts")
   //   .then(res => {
