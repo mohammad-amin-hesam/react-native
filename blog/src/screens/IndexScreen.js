@@ -14,16 +14,22 @@ const IndexScreen = ({ navigation }) => {
 
   useEffect(() => {
     getBlogPosts();
+
+    const listener = navigation.addListener("didFocus", () => {
+      getBlogPosts();
+    });
+
+    return () => listener.remove();
   }, []);
 
   const renderList = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("Show", { id: item.id })}
+        onPress={() => navigation.navigate("Show", { id: item._id })}
       >
         <View style={styles.row}>
           <Text style={styles.title}>
-            {item.title} - {item.id}
+            {item.title} - {item._id}
           </Text>
           <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
             <Feather style={styles.icon} name="trash" />
@@ -37,7 +43,7 @@ const IndexScreen = ({ navigation }) => {
     <View>
       <FlatList
         data={state}
-        keyExtractor={blogPost => blogPost.id}
+        keyExtractor={blogPost => blogPost._id}
         renderItem={renderList}
       />
     </View>

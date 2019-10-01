@@ -15,14 +15,7 @@ const blogReducer = (state, action) => {
       return state.filter(blogPost => blogPost.id !== action.id);
 
     case "add_blogpost":
-      return [
-        ...state,
-        {
-          id: Math.floor(Math.random() * 99999),
-          title: action.payload.title,
-          content: action.payload.content
-        }
-      ];
+      return state;
 
     default:
       return state;
@@ -36,8 +29,9 @@ const getBlogPosts = dispatch => () => {
   });
 };
 
-const addBlogPost = dispatch => (title, content, callBack) => {
-  dispatch({ type: "add_blogpost", payload: { title, content } });
+const addBlogPost = dispatch => async (title, content, callBack) => {
+  const res = await jsonServer.post("api", { content, title });
+  dispatch({ type: "add_blogpost", payload: res.data });
   if (callBack) callBack();
 };
 
