@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://test.onmiz.org:8080/v2/"
+  baseURL: "http://192.168.1.12:4000/"
 });

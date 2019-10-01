@@ -37,7 +37,7 @@ const IndexScreen = ({ navigation }) => {
     <View>
       <FlatList
         data={state}
-        keyExtractor={blogPost => blogPost.id.toString()}
+        keyExtractor={blogPost => blogPost.id}
         renderItem={renderList}
       />
     </View>

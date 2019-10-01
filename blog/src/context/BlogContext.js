@@ -4,7 +4,7 @@ import jsonServer from "../api/jsonServer";
 const blogReducer = (state, action) => {
   switch (action.type) {
     case "get_blogposts":
-      return action.payload;
+      return action.data;
 
     case "edit_blogpost":
       return state.map(blogPost =>
@@ -30,23 +30,10 @@ const blogReducer = (state, action) => {
 };
 
 const getBlogPosts = dispatch => () => {
-  jsonServer
-    .post("login", {
-      mobile: "guest",
-      password: "1",
-      code: "+98"
-    })
-    .then(res => {
-      console.log(res.data.token);
-    });
-  // jsonServer
-  //   .get("blogposts")
-  //   .then(res => {
-  //     dispatch({ type: "get_blogposts", payload: res.data });
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
+  jsonServer.get("api").then(res => {
+    const { data } = res;
+    dispatch({ type: "get_blogposts", data });
+  });
 };
 
 const addBlogPost = dispatch => (title, content, callBack) => {
