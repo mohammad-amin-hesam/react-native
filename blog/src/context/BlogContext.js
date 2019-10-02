@@ -8,11 +8,11 @@ const blogReducer = (state, action) => {
 
     case "edit_blogpost":
       return state.map(blogPost =>
-        blogPost.id === action.payload.id ? action.payload : blogPost
+        blogPost._id === action.payload._id ? action.payload : blogPost
       );
 
     case "delete_blogpost":
-      return state.filter(blogPost => blogPost.id !== action.id);
+      return state.filter(blogPost => blogPost._id !== action.id);
 
     case "add_blogpost":
       return state;
@@ -36,12 +36,16 @@ const addBlogPost = dispatch => async (title, content, callBack) => {
 };
 
 const editBlogPost = dispatch => (id, title, content, callBack) => {
-  dispatch({ type: "edit_blogpost", payload: { id, title, content } });
-  if (callBack) callBack();
+  jsonServer.put(`api/${id}`, { title, content }).then(res => {
+    dispatch({ type: "edit_blogpost", payload: { _id: id, title, content } });
+    if (callBack) callBack();
+  });
 };
 
-const deleteBlogPost = dispatch => id =>
+const deleteBlogPost = dispatch => async id => {
+  await jsonServer.delete(`api/${id}`);
   dispatch({ type: "delete_blogpost", id });
+};
 
 export const { Context, Provider } = createDataContext(
   blogReducer,
