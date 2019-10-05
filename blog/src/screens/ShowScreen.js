@@ -18,8 +18,6 @@ const ShowScreen = ({ navigation }) => {
   );
 };
 
-// part of 13 is finished and 14 starts :)
-
 ShowScreen.navigationOptions = ({ navigation }) => {
   return {
     headerRight: (
