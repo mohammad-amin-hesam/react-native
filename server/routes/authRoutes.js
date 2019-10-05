@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
@@ -9,22 +10,26 @@ router.post("/signup", (req, res) => {
   const { email, password } = req.body;
   const user = new User({ email, password });
 
-  user
-    .save()
-    .then(user => {
-      const token = jwt.JsonWebTokenError(
-        { userId: user._id },
-        "MY_SECRET_KEY"
-      );
-      res.json({ token });
-    })
-    .catch(err => res.status(422).send(err.message));
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) throw err;
+      user.password = hash;
+      user
+        .save()
+        .then(user => {
+          jwt.sign(user, "MY_SECRET_KEY", { expiresIn: 3600 }, (err, token) => {
+            res.json({ token: "Bearer " + token });
+          });
+        })
+        .catch(err => res.status(422).send(err.message));
+    });
+  });
 });
 
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || password) {
+  if (!email || !password) {
     return res.status(422).send({ err: "invalid password or email" });
   }
 
@@ -35,9 +40,11 @@ router.post("/signin", async (req, res) => {
   }
 
   try {
-    await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    res.json({ token });
+    await bcrypt.compare(password, user.password);
+    console.log(user);
+    jwt.sign(user, "MY_SECRET_KEY", { expiresIn: 3600 }, (err, token) => {
+      res.json({ token: "Bearer " + token });
+    });
   } catch (err) {
     return res.status(422).send({ error: "invalid password or email" });
   }
