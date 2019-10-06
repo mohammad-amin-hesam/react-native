@@ -8,6 +8,7 @@ const app = express();
 
 const posts = require("./routes/posts");
 const authRoutes = require("./routes/authRoutes");
+const trackRoutes = require("./routes/trackRoutes");
 
 //Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +25,8 @@ mongoose
   });
 
 app.use("/api", posts);
-app.use("/auth", authRoutes);
+app.use(authRoutes);
+app.use(trackRoutes);
 
 app.get("/", requireAuth, (req, res) => {
   res.status(200).json(`Your email: ${req.user.email}`);

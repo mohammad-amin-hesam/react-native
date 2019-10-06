@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const keys = require("../config/keys");
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -9,7 +10,7 @@ module.exports = (req, res, next) => {
   }
 
   const token = authorization.replace("Bearer ", "");
-  jwt.verify(token, "MY_SECRET_KET", async (err, payload) => {
+  jwt.verify(token, keys.secretOrKey, async (err, payload) => {
     if (err) {
       return res.status(401).send({ error: "You must be logged in" });
     }

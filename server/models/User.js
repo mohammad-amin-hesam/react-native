@@ -13,3 +13,5 @@ const UserScema = new mongoose.Schema({
 });
 
 module.exports = User = mongoose.model("user", UserScema);
+
+// 20 from 14 finished :)

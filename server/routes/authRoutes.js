@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const keys = require("../config/keys");
 
 const User = require("../models/User");
 
@@ -17,9 +18,14 @@ router.post("/signup", (req, res) => {
       user
         .save()
         .then(user => {
-          jwt.sign(user, "MY_SECRET_KEY", { expiresIn: 3600 }, (err, token) => {
-            res.json({ token: "Bearer " + token });
-          });
+          jwt.sign(
+            user,
+            keys.secretOrKey,
+            { expiresIn: 3600 },
+            (err, token) => {
+              res.json({ token: "Bearer " + token });
+            }
+          );
         })
         .catch(err => res.status(422).send(err.message));
     });
@@ -34,6 +40,9 @@ router.post("/signin", async (req, res) => {
   }
 
   const user = await User.findOne({ email });
+  const { email: _email, password: _password, _id } = user;
+
+  const payload = { email: _email, password: _password, _id };
 
   if (!user) {
     return res.status(404).send({ error: "Email not found" });
@@ -41,8 +50,8 @@ router.post("/signin", async (req, res) => {
 
   try {
     await bcrypt.compare(password, user.password);
-    console.log(user);
-    jwt.sign(user, "MY_SECRET_KEY", { expiresIn: 3600 }, (err, token) => {
+    jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+      if (err) console.log(err);
       res.json({ token: "Bearer " + token });
     });
   } catch (err) {
