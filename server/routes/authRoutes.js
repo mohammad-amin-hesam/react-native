@@ -18,14 +18,9 @@ router.post("/signup", (req, res) => {
       user
         .save()
         .then(user => {
-          jwt.sign(
-            user,
-            keys.secretOrKey,
-            { expiresIn: 3600 },
-            (err, token) => {
-              res.json({ token: "Bearer " + token });
-            }
-          );
+          jwt.sign(user, keys.secretOrKey, (err, token) => {
+            res.json({ token: "Bearer " + token });
+          });
         })
         .catch(err => res.status(422).send(err.message));
     });
@@ -50,7 +45,7 @@ router.post("/signin", async (req, res) => {
 
   try {
     await bcrypt.compare(password, user.password);
-    jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+    jwt.sign(payload, keys.secretOrKey, (err, token) => {
       if (err) console.log(err);
       res.json({ token: "Bearer " + token });
     });
