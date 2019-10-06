@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
       return res.status(401).send({ error: "You must be logged in" });
     }
 
-    const { userId } = payload;
+    const { _id: userId } = payload;
 
     const user = await User.findById(userId);
     req.user = user;
