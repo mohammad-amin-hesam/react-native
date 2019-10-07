@@ -8,9 +8,11 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "java_home": "export JAVA_HOME=/home/amin/apps/android-studio/jre"
+    "java_home": "export JAVA_HOME=/home/amin/apps/android-studio/jre",
+    "online": "ngrok http 4000"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "react": "16.9.0",
     "react-native": "0.61.2",
     "react-native-elements": "^1.2.5",
