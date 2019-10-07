@@ -1,4 +1,5 @@
 import createDataContext from "./createDataContext";
+import api from "../api";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -7,7 +8,14 @@ const authReducer = (state, action) => {
   }
 };
 
-const signup = dispatch => ({ email, password }) => {};
+const signup = dispatch => async ({ email, password }) => {
+  try {
+    const res = await api.post("/signup", { email, password });
+    console.log(res.data);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 const signin = dispacth => ({ email, password }) => {};
 
