@@ -13,7 +13,6 @@ const signup = dispatch => async ({ email, password }) => {
     const res = await api.post("/signup", { email, password });
   } catch (err) {
     if (err.response) {
-      console.log(err.response.data);
     } else {
       console.log(err.message);
     }
