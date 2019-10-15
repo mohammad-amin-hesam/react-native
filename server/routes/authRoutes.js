@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/signup", (req, res) => {
   const { email, password } = req.body;
   const user = new User({ email, password });
+  const _user = { email, password };
 
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(user.password, salt, (err, hash) => {
@@ -18,7 +19,10 @@ router.post("/signup", (req, res) => {
       user
         .save()
         .then(user => {
-          jwt.sign(user, keys.secretOrKey, (err, token) => {
+          const { email: _email, password: _password, _id } = user;
+          const payload = { email: _email, password: _password, _id };
+          jwt.sign(payload, keys.secretOrKey, (err, token) => {
+            if (err) console.log(err);
             res.json({ token: "Bearer " + token });
           });
         })
@@ -35,13 +39,14 @@ router.post("/signin", async (req, res) => {
   }
 
   const user = await User.findOne({ email });
-  const { email: _email, password: _password, _id } = user;
-
-  const payload = { email: _email, password: _password, _id };
 
   if (!user) {
     return res.status(404).send({ error: "Email not found" });
   }
+
+  const { email: _email, password: _password, _id } = user;
+
+  const payload = { email: _email, password: _password, _id };
 
   try {
     await bcrypt.compare(password, user.password);

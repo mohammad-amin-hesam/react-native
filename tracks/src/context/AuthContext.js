@@ -1,6 +1,7 @@
 import createDataContext from "./createDataContext";
 import { AsyncStorage } from "react-native";
 import api from "../api";
+import { navigate } from "../helpers/navigationRef";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -23,15 +24,13 @@ const signup = dispatch => async ({ email, password }, callback) => {
     dispatch({ type: "signup", payload: token });
 
     // navigate to main flow :)
-    if (callback) callback();
+    // if (callback) callback();
+    navigate("TrackList");
   } catch (err) {
-    if (err.response) {
-    } else {
-      dispatch({
-        type: "add_error",
-        payload: "Something went wrong with sign up"
-      });
-    }
+    dispatch({
+      type: "add_error",
+      payload: "Something went wrong with sign up"
+    });
   }
 };
 

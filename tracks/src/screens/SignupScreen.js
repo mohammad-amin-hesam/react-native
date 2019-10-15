@@ -30,7 +30,7 @@ const SignupScreen = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
       />
-      {state.errorMessage && (
+      {state.errorMessage !== "" && (
         <Text style={styles.errorMessage}>{state.errorMessage}</Text>
       )}
       <Spacer>
