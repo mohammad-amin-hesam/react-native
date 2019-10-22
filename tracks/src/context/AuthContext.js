@@ -1,5 +1,5 @@
 import createDataContext from "./createDataContext";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import api from "../api";
 import { navigate } from "../helpers/navigationRef";
 
@@ -16,15 +16,13 @@ const authReducer = (state, action) => {
   }
 };
 
-const signup = dispatch => async ({ email, password }, callback) => {
+const signup = dispatch => async ({ email, password }) => {
   try {
     const res = await api.post("/signup", { email, password });
     const { token } = res.data;
     await AsyncStorage.setItem("token", token);
     dispatch({ type: "signup", payload: token });
 
-    // navigate to main flow :)
-    // if (callback) callback();
     navigate("TrackList");
   } catch (err) {
     dispatch({

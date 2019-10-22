@@ -1,41 +1,28 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import { Text, Input, Button } from "react-native-elements";
+import React, { useContext } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text } from "react-native-elements";
 import Spacer from "../components/Spacer";
 import { Context } from "../context/AuthContext";
+import AuthForm from "../components/AuthForm";
 
 const SignupScreen = ({ navigation }) => {
   const { state, signup } = useContext(Context);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
     <View style={styles.container}>
-      <Spacer>
-        <Text h3>Sign Up for Tracker</Text>
-      </Spacer>
-      <Input
-        label="Email"
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={email}
-        onChangeText={setEmail}
+      <AuthForm
+        headerText={"Sign Up for Tracker"}
+        errorMessage={state.errorMessage}
+        btnText={"Sign Up"}
+        onSubmit={val => signup(val)}
       />
-      <Spacer />
-      <Input
-        label="Password"
-        secureTextEntry={true}
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={password}
-        onChangeText={setPassword}
-      />
-      {state.errorMessage !== "" && (
-        <Text style={styles.errorMessage}>{state.errorMessage}</Text>
-      )}
-      <Spacer>
-        <Button title="Sign Up" onPress={() => signup({ email, password })} />
-      </Spacer>
+      <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+        <Spacer>
+          <Text style={styles.link}>
+            Already have an account ? Sign in instead.
+          </Text>
+        </Spacer>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -57,6 +44,9 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 10,
     color: "red"
+  },
+  link: {
+    color: "blue"
   }
 });
 
