@@ -47,4 +47,6 @@ const styles = StyleSheet.create({
   }
 });
 
+// 22 from 15 ---- 1:56 to finish
+
 export default AuthForm;
