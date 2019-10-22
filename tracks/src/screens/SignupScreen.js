@@ -39,12 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center"
   },
-  errorMessage: {
-    fontSize: 16,
-    marginTop: 15,
-    marginHorizontal: 10,
-    color: "red"
-  },
   link: {
     color: "blue"
   }
