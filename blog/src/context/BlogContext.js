@@ -17,6 +17,9 @@ const blogReducer = (state, action) => {
     case "add_blogpost":
       return state;
 
+    case "fetch_posts":
+      return [...state, action.payload];
+
     default:
       return state;
   }
@@ -27,6 +30,10 @@ const getBlogPosts = dispatch => () => {
     const { data } = res;
     dispatch({ type: "get_blogposts", data });
   });
+};
+
+const fetchPosts = dispatch => () => {
+  jsonServer.get("https://server1.onmiz.org/v2");
 };
 
 const addBlogPost = dispatch => async (title, content, callBack) => {
@@ -54,7 +61,8 @@ export const { Context, Provider } = createDataContext(
     deleteBlogPost,
     addBlogPost,
     editBlogPost,
-    getBlogPosts
+    getBlogPosts,
+    fetchPosts
   },
   []
 );
